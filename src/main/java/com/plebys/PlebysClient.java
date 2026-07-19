@@ -23,21 +23,22 @@ public class PlebysClient implements ClientModInitializer {
         moduleManager = new ModuleManager();
 
         openGuiKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.plebysclient.open_gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_P, "category.plebysclient"
+                "key.plebysclient.open_gui",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_P,
+                "category.plebysclient"
         ));
 
-        ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
-    }
-
-    private void onClientTick(MinecraftClient client) {
-        if (openGuiKey.wasPressed()) {
-            if (!(client.currentScreen instanceof ClickGUI)) {
-                client.setScreen(new ClickGUI());
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (openGuiKey.wasPressed()) {
+                if (!(client.currentScreen instanceof ClickGUI)) {
+                    client.setScreen(new ClickGUI());
+                }
             }
-        }
 
-        moduleManager.getModules().stream()
-                .filter(Module::isToggled)
-                .forEach(Module::onUpdate);
+            moduleManager.getModules().forEach(module -> {
+                if (module.isToggled()) module.onUpdate();
+            });
+        });
     }
 }

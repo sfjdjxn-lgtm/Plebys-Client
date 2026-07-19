@@ -2,7 +2,6 @@ package com.plebys.modules;
 
 import com.plebys.settings.*;
 import net.minecraft.client.MinecraftClient;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ public abstract class Module {
     protected final String name;
     protected final Category category;
     protected boolean toggled = false;
-    protected int keyBind = -1;
 
     protected final List<Setting> settings = new ArrayList<>();
     protected MinecraftClient mc = MinecraftClient.getInstance();
@@ -30,7 +28,6 @@ public abstract class Module {
     public abstract void onDisable();
     public abstract void onUpdate();
 
-    // Settings
     protected BooleanSetting addBoolean(String name, boolean def) {
         BooleanSetting s = new BooleanSetting(name, def);
         settings.add(s);
